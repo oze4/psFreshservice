@@ -495,14 +495,14 @@ function New-FreshserviceApiRequest {
 $__PrivateFunctions__ = @(
     "ConvertTo-Base64",
     "ConvertFrom-Base64",
-    "Confirm-StringIsUri",
-    "New-FreshserviceApiRequest"
+    "Confirm-StringIsUri"
 )
 
 $__PublicFunctions__ = @(
     "Get-FreshserviceTicket",
     "Get-FreshserviceUser",
-    "Connect-Freshservice"
+    "Connect-Freshservice",
+    "New-FreshserviceApiRequest"    
 )
 
 try {
