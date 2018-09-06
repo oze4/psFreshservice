@@ -37,6 +37,7 @@ $AllUsers = Get-FreshserviceUser  # No params means all users are returned
 # Iterate through users
 foreach($user in $AllUsers){
     Write-Host `r`n("=" * 50) -f Yellow
+    Write-Host $user.name
     Write-Host $user
     Write-Host `r`n("=" * 50) -f Yellow
 }
@@ -47,6 +48,7 @@ $AllTickets = Get-FreshserviceTicket # No params means all tickets are returned
 # Iterate through tickets
 foreach($ticket in $AllTickets){
     Write-Host `r`n("=" * 50) -f Yellow
+    Write-Host $ticket.id
     Write-Host $ticket
     Write-Host `r`n("=" * 50) -f Yellow    
 }
