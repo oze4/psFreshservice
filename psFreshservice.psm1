@@ -137,6 +137,10 @@ function Get-FreshserviceTicket {
             .EXAMPLE
             - TODO:complete this
     #>
+    [cmdletbinding(
+            DefaultParameterSetName="Default"
+    )]
+    
     param(
         [Parameter(Mandatory=$false, ParameterSetName="Filter")]
         [ValidateSet("all_tickets","new_my_open","monitored_by","spam","deleted")]
