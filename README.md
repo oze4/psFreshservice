@@ -2,7 +2,7 @@
 
 Freshservice Powershell Module.
 
-** If you use SSO (single sign-on), you HAVE TO use the API Key method to connect **
+**If you use SSO (single sign-on), you HAVE TO use the API Key method to connect**
 
 # :Getting Started:
 
