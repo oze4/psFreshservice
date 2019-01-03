@@ -126,9 +126,9 @@ function Get-FreshserviceRequester {
             .PARAMETER Email
             - Email address of requester (ex: test.user@domain.com)
             .PARAMETER MobilePhone
-            - Mobile phone of requester, must be in same format it was input as (ex: 724-222-8900)
+            - Mobile phone of requester, must be in same format it was input as (ex: 111-111-1111)
             .EXAMPLE
-            - $interestingRequester = Get-FreshserviceRequester -WorkPhone '724-222-8900'
+            - $interestingRequester = Get-FreshserviceRequester -WorkPhone '111-111-1111'
     #>
     [cmdletbinding(
             DefaultParameterSetName="Default"
