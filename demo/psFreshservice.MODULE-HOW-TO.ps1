@@ -25,7 +25,7 @@
 #>
 
 # Import the module from wherever you saved it to
-Import-Module "C:\Freshservice\Freshservice.psm1"
+Import-Module "C:\Freshservice\psFreshservice.psm1"
 
 # Should return 'True' if successful, 'False' if not
 # if your domain is google, dont put google.com or google.freshservice.com, just put google
