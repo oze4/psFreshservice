@@ -27,7 +27,7 @@ Connect-Freshservice -ApiKey <#-or-#> -Username -Password
 ```` powershell
 New-FreshserviceApiRequest -ApiUrlQuery <#-or-#> -ApiUrlFull <#-and-#> -RequestMethod <#-Default|Delete|Get|Head|Merge|Options|Path|Put|Post|Trace-#> -ContentType -AuthorizationHeader -FreshserviceBaseUrl
 ````
-- Important to note that ```` powershell New-FreshserviceApiRequest ````
+- `New-FreshserviceApiRequest` is the 'core' function that the majority of functions in this module use, specifically the ones that interact with the API via REST
 ```` powershell
 ConvertTo-Base64 -StringToEncode
 ````
