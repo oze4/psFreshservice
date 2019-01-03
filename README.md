@@ -34,6 +34,11 @@ Connect-Freshservice -ApiKey <#-or-#> -Username -Password <#-and-#> -Domain
 ````
 - Within the `-Domain` parameter, you **DO NOT** have to supply the entire domain name!!!
   - *If your domain is `google.com` then you only need to use `google` for this parameter!!!*
+```` powershell
+Set-RequiredSecurityProtocol
+````
+- This command is ran during module import
+  - ***it is needed to talk to the Freshservice API - it sets the appropriate encryption types for the session and MUST BE RAN EACH TIME YOU IMPORT THE MODULE!!***
 
 ### Core
 ```` powershell
