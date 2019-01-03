@@ -14,7 +14,8 @@ Freshservice Powershell Module.
 
 ## :Getting Started:
 
-**If you use SSO (single sign-on), you HAVE TO use the API Key method to connect**
+**If you use SSO (single sign-on), you HAVE TO use the API Key method to connect!!!**
+
 This module offers two ways to connect to Freshservice (Username and Password | Freshservice API Key). In order to get your API Key you'll need to log into your account, go to 'Profile Settings' and your API Key will be on the right hand side.
 
 ***[How to get Freshservice API Key](https://help-desk-migration.com/help/how-to-get-freshdesk-freshservice-api-key/)***
