@@ -85,6 +85,10 @@ Get-FreshserviceTicket -TicketId <#-or-#> -RequesterEmail <#-or-#> -TicketFilter
 ````
 - *If parameters are not used, __all Tickets are returned__*
 
+```` powershell
+New-FreshserviceTicket
+````
+#### - ***This function is currently in progress***
 
 
 ### Requesters
