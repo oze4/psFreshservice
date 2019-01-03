@@ -1,4 +1,4 @@
-﻿<#
+<#
 
         MIT License
 
@@ -113,6 +113,69 @@ function Get-FreshserviceUser {
         }
             
     }
+}
+
+
+function Get-FreshserviceRequester {
+    <#
+            .SYNOPSIS
+            - Can return all requesters or only one that is specified
+            .DESCRIPTION
+            - If no params are specified, all requesters are returned
+            - Can only use 1 parameter at a time, due to ParameterSetNames
+            .PARAMETER Email
+            - Email address of requester (ex: test.user@domain.com)
+            .PARAMETER MobilePhone
+            - Mobile phone of requester, must be in same format it was input as (ex: 724-222-8900)
+            .EXAMPLE
+            - $interestingRequester = Get-FreshserviceRequester -WorkPhone '724-222-8900'
+    #>
+    [cmdletbinding(
+            DefaultParameterSetName="Default"
+    )]
+    
+    param(
+        [Parameter(Mandatory=$false, ParameterSetName="RequesterEmail")]
+        [string]$Email,
+        
+        [Parameter(Mandatory=$false, ParameterSetName="RequesterMobilePhone")]
+        [string]$MobilePhone,
+        
+        [Parameter(Mandatory=$false, ParameterSetName="RequesterWorkPhone")]
+        [string]$WorkPhone
+    )
+    
+    try {
+    
+        $queryBase = "/api/v2/requesters"
+    
+        # if no params, return all requesters
+        if($PSBoundParameters.Keys.Count -eq 0){
+
+            (New-FreshserviceApiRequest -ApiUrlQuery $queryBase -RequestMethod Get -ContentType application/json).requesters
+
+        } else {
+                      
+            # find which param was used
+            $query_ = $null
+            switch($PSBoundParameters.Keys){
+                "Email"       { $query_ = ("{0}?email={1}" -f $queryBase, $Email) }
+                "MobilePhone" { $query_ = ("{0}?mobile_phone_number={1}" -f $queryBase, $MobilePhone) }
+                "WorkPhone"   { $query_ = ("{0}?work_phone_number={1}" -f $queryBase, $WorkPhone) }
+            }
+            
+            # return info
+            (New-FreshserviceApiRequest -ApiUrlQuery $query_ -RequestMethod Get -ContentType application/json).requesters
+                    
+        }
+    
+    } catch {
+    
+        $FreshserviceRequesterNotFoundException = "[Get-FreshserviceRequester]:Something went wrong attempting to gather requester(s)! Full Error:`r`n`r`n$($_)"
+        throw [System.Exception]::new($FreshserviceRequesterNotFoundException)
+    
+    }
+        
 }
 
 
@@ -466,8 +529,7 @@ function New-FreshserviceApiRequest {
                     'Authorization' = $AuthorizationHeader
                     'Content-Type'  = $ContentType
                 }        
-                try { 
-                    $LogonTest = $null # make sure we know our LogonTest variable is null                    
+                try {
                     Invoke-RestMethod -Method $RequestMethod -Uri $FinalApiUrl -Headers $Headers # return api request
                 } catch {
                     $NewFreshserviceApiRequestSendFailException = "[New-FreshserviceApiRequest]::Something went wrong while sending your Freshservice API Request! Full Error:`r`n`r`n$($_)"
@@ -492,21 +554,22 @@ function New-FreshserviceApiRequest {
 #                                                            #
 ##############################################################
 # Listing private functions just for balance
-$__PrivateFunctions__ = @(
-    "ConvertTo-Base64",
-    "ConvertFrom-Base64",
-    "Confirm-StringIsUri"
-)
+<# removing this for simplicities sake
+        $__PrivateFunctions__ = @(
+        "ConvertTo-Base64",
+        "ConvertFrom-Base64",
+        "Confirm-StringIsUri"
+        )
 
-$__PublicFunctions__ = @(
-    "Get-FreshserviceTicket",
-    "Get-FreshserviceUser",
-    "Connect-Freshservice",
-    "New-FreshserviceApiRequest"    
-)
-
+        $__PublicFunctions__ = @(
+        "Get-FreshserviceTicket",
+        "Get-FreshserviceUser",
+        "Connect-Freshservice",
+        "New-FreshserviceApiRequest"    
+        )
+#>
 try {
-    Export-ModuleMember -Function $__PublicFunctions__
+    Export-ModuleMember * 
     # DO NOT REMOVE THE BELOW LINE!
     <##> Set-RequiredSecurityProtocol <##>
     # DO NOT REMOVE THE ABOVE LINE!
