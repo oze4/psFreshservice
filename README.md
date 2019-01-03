@@ -25,6 +25,10 @@ Connect-Freshservice -ApiKey <#-or-#> -Username -Password
 
 ### Core
 ```` powershell
+New-FreshserviceApiRequest -ApiUrlQuery <#-or-#> -ApiUrlFull <#-and-#> -RequestMethod <#-Default|Delete|Get|Head|Merge|Options|Path|Put|Post|Trace-#> -ContentType -AuthorizationHeader -FreshserviceBaseUrl
+````
+- Important to note that ```` powershell New-FreshserviceApiRequest ````
+```` powershell
 ConvertTo-Base64 -StringToEncode
 ````
 ```` powershell
