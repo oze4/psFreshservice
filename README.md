@@ -22,15 +22,17 @@ This module offers two ways to connect to Freshservice (Username and Password | 
 
 ## :Demo:
 
-***[High level module demo](https://github.com/oze4/psFreshservice/blob/master/example/psFreshservice.MODULE-HOW-TO.ps1)***
+***[High level module demo](https://github.com/oze4/psFreshservice/blob/master/demo/psFreshservice.MODULE-HOW-TO.ps1)***
 
 ## :Functions:
 
 
 ### Connecting
 ```` powershell
-Connect-Freshservice -ApiKey <#-or-#> -Username -Password
+Connect-Freshservice -ApiKey <#-or-#> -Username -Password <#-and-#> -Domain
 ````
+- Within the `-Domain` parameter, you **DO NOT** have to supply the entire domain name!!!
+  - *If your domain is `google.com` then you only need to use `google` for this parameter!!!*
 
 ### Core
 ```` powershell
