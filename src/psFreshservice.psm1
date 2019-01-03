@@ -2,7 +2,7 @@
 
         MIT License
 
-        Copyright (c) 2019 Matthew Oestreich
+        Copyright (c) 2018 Matthew Oestreich
 
         Permission is hereby granted, free of charge, to any person obtaining a copy
         of this software and associated documentation files (the "Software"), to deal
@@ -52,67 +52,75 @@ function Set-RequiredSecurityProtocol {
 
 
 
-
-function Get-FreshserviceUser {
+function Get-FreshserviceAgent {
     <#
             .SYNOPSIS
-            - Get Freshservice user
+            - Can return all agents or only one that is specified
             .DESCRIPTION
-            - ** if a userId or userEmail is not supplied, all users are returned!!! **
-            .PARAMETER UserId
-            - Id of the user you want to retrieve
-            - Cannot be used with any other parameter
-            .PARAMETER UserEmail
-            - EmailAddress of the user you want to retrieve
-            - Cannot be used with any other parameter
+            - If no params are specified, all agents are returned
+            - Can only use 1 parameter at a time, due to ParameterSetNames
+            .PARAMETER Email
+            - Email address of agent (ex: test.user@domain.com)
+            .PARAMETER MobilePhone
+            - Mobile phone of agent, must be in same format it was input as (ex: 111-111-1111)
             .EXAMPLE
-            - TODO:complete this
-            .EXAMPLE
-            - TODO:complete this
+            - $interestingAgent = Get-FreshserviceAgent -WorkPhone '111-111-1111'
     #>
     [cmdletbinding(
-            DefaultParameterSetName="None"
+            DefaultParameterSetName="Default"
     )]
     
     param(
-        [Parameter(Mandatory=$false, ParameterSetName="UserId")]
-        [string]$UserId,
+        [Parameter(Mandatory=$false, ParameterSetName="AgentId")]
+        [string]$Id,
         
-        [Parameter(Mandatory=$false, ParameterSetName="UserEmail")]
-        [string]$UserEmail
+        [Parameter(Mandatory=$false, ParameterSetName="AgentWorkPhone")]
+        [ValidateSet("fulltime", "occasional")]
+        [string]$State,        
+        
+        [Parameter(Mandatory=$false, ParameterSetName="AgentEmail")]
+        [string]$Email,
+        
+        [Parameter(Mandatory=$false, ParameterSetName="AgentMobilePhone")]
+        [string]$MobilePhone,
+        
+        [Parameter(Mandatory=$false, ParameterSetName="AgentWorkPhone")]
+        [string]$WorkPhone
     )
     
-    try { 
+    try {
     
-        # Easiest to just grab all users up front
-        $users    = (New-FreshserviceApiRequest -ApiUrlQuery "/itil/requesters.json" -RequestMethod Get -ContentType application/json).user    
-        $finalOut = $null
+        $queryBase = "/api/v2/agents"
+    
+        # if no params, return all requesters
+        if($PSBoundParameters.Keys.Count -eq 0){
 
-        # If no params are used, return all users
-        if($PSBoundParameters.Keys.Count -eq 0){        
-            $finalOut = $users         
-        } else {        
+            (New-FreshserviceApiRequest -ApiUrlQuery $queryBase -RequestMethod Get -ContentType application/json).agents
+
+        } else {
+                      
+            # find which param was used
+            $query_ = $null
             switch($PSBoundParameters.Keys){
-                "UserId"    { $finalOut = $users | Where-Object { $_.id -eq $UserId } }        
-                "UserEmail" { $finalOut = $users | Where-Object { $_.email -eq $UserEmail } }        
-            }            
+                "Id"          { $query_ = ("{0}/{1}" -f $queryBase, $Id) }
+                "State"       { $query_ = ("{0}?state={1}" -f $queryBase, $State) }
+                "Email"       { $query_ = ("{0}?email={1}" -f $queryBase, $Email) }
+                "MobilePhone" { $query_ = ("{0}?mobile_phone_number={1}" -f $queryBase, $MobilePhone) }
+                "WorkPhone"   { $query_ = ("{0}?work_phone_number={1}" -f $queryBase, $WorkPhone) }
+            }
+            
+            # return info
+            (New-FreshserviceApiRequest -ApiUrlQuery $query_ -RequestMethod Get -ContentType application/json).agents
+                    
         }
-                
+    
     } catch {
     
-        $UserNotFoundException = "Something went wrong getting Freshservice user! Full Error:`r`n`r`n$($_)"
-        throw [System.Exception]::new($UserNotFoundException)
-        
-    } finally {
+        $FreshserviceAgentNotFoundException = "[Get-FreshserviceAgent]:Something went wrong attempting to gather agent(s)! Full Error:`r`n`r`n$($_)"
+        throw [System.Exception]::new($FreshserviceAgentNotFoundException)
     
-        # return
-        if($finalOut -eq $null){
-            throw [System.Exception]::new("No user(s) found that meet your search requirements!") # let em know we didnt find anything
-        } else {
-            $finalOut # return what we got
-        }
-            
     }
+        
 }
 
 
@@ -135,6 +143,9 @@ function Get-FreshserviceRequester {
     )]
     
     param(
+        [Parameter(Mandatory=$false, ParameterSetName="RequesterId")]
+        [string]$Id,
+        
         [Parameter(Mandatory=$false, ParameterSetName="RequesterEmail")]
         [string]$Email,
         
@@ -159,6 +170,7 @@ function Get-FreshserviceRequester {
             # find which param was used
             $query_ = $null
             switch($PSBoundParameters.Keys){
+                "Id"          { $query_ = ("{0}/{1}" -f $queryBase, $Id) }
                 "Email"       { $query_ = ("{0}?email={1}" -f $queryBase, $Email) }
                 "MobilePhone" { $query_ = ("{0}?mobile_phone_number={1}" -f $queryBase, $MobilePhone) }
                 "WorkPhone"   { $query_ = ("{0}?work_phone_number={1}" -f $queryBase, $WorkPhone) }
@@ -244,6 +256,104 @@ function Get-FreshserviceTicket {
         throw [System.Exception]::new($FreshserviceTicketNotFoundException)
     
     }
+}
+
+
+function New-FreshserviceTicket {
+    <#
+            ** ** ** ** ** ** **
+            *THIS IS IN PROGRESS*
+            ** ** ** ** ** ** **
+    #>
+    <#
+            .SYNOPSIS
+            - Create new Freshservice ticket
+            .DESCRIPTION
+            - Creates a Freshservice ticket
+            .PARAMETER %
+            - 
+            - 
+            .PARAMETER %
+            - 
+            - 
+            .PARAMETER %
+            - 
+            - 
+            .EXAMPLE
+            - TODO:complete this
+            .EXAMPLE
+            - TODO:complete this
+    #>
+    [cmdletbinding(
+            DefaultParameterSetName = "NewRequester_AgentId"
+    )]
+    
+    param(
+        [Parameter(Mandatory=$true, ParameterSetName="NewRequester_AgentId", Position=0)]
+        [Parameter(Mandatory=$true, ParameterSetName="NewRequester_AgentEmail", Position=0)]
+        [string]$NewRequesterName,
+        
+        [Parameter(Mandatory=$true, ParameterSetName="ExistingRequester_AgentId", Position=0)]
+        [Parameter(Mandatory=$true, ParameterSetName="ExistingRequester_AgentEmail", Position=0)]
+        [string]$ExistingRequesterId,        
+        
+        [Parameter(Mandatory=$true, ParameterSetName="NewRequester_AgentId")]
+        [Parameter(Mandatory=$true, ParameterSetName="NewRequester_AgentEmail")]
+        [string]$NewRequesterEmail,
+        
+        [Parameter(Mandatory=$true, ParameterSetName="NewRequester_AgentId")]
+        [Parameter(Mandatory=$true, ParameterSetName="NewRequester_AgentEmail")]
+        [string]$NewRequesterPhone,
+        
+        [Parameter(Mandatory=$true, ParameterSetName="NewRequester_AgentId")]
+        [Parameter(Mandatory=$true, ParameterSetName="ExistingRequester_AgentId")]
+        [string]$AgentId,
+        
+        [Parameter(Mandatory=$true, ParameterSetName="NewRequester_AgentEmail")]
+        [Parameter(Mandatory=$true, ParameterSetName="ExistingRequester_AgentEmail")]
+        [string]$AgentEmail,  
+        
+        [Parameter(Mandatory=$true)]
+        [string]$Subject,        
+        
+        [Parameter(Mandatory=$true)]
+        [ValidateSet("Open", "Pending", "Resolved", "Closed")]
+        [string]$Status,
+        
+        [Parameter(Mandatory=$true)]
+        [ValidateSet("Low", "Medium", "High", "Urgent")]
+        [string]$Priority,
+        
+        [Parameter(Mandatory=$true)]
+        [string]$Description # gets converted to HTML
+        
+        
+    )
+    
+    try {
+    
+        $Statuses = @{
+            "Open"     = "2"
+            "Pending"  = "3"
+            "Resolved" = "4"
+            "Closed"   = "5"
+        }
+        
+        $Priorities = @{
+            "Low"    = "1"
+            "Medium" = "2"
+            "High"   = "3"
+            "Urgent" = "4"
+        }
+        
+        
+    
+    } catch {
+    
+    
+    
+    }
+
 }
 
 
@@ -494,6 +604,8 @@ function New-FreshserviceApiRequest {
         [string]$FreshserviceBaseUrl = $Global:_FRESHSERVICE_SESSION_INFO_.BaseUrl        
     )
     
+    $ErrorActionPreference = "Stop"
+    
     if(($AuthorizationHeader -eq $null) -or ($FreshserviceBaseUrl -eq $null)){
     
         $NoFreshserviceSessionsFoundException  = "[New-FreshserviceApiRequest]:No active Freshservice session found! "
@@ -504,8 +616,9 @@ function New-FreshserviceApiRequest {
         
         try {        
         
-            $FinalApiUrl = $null # to be used later (below)
-            $QueryType   = $null
+            $FinalApiUrl      = $null # to be used later (below)
+            $QueryType        = $null
+            $FirstCatchThrown = $false
             
             switch($PSBoundParameters.Keys) { # sort out what kind of query the user gave us
                 "ApiUrlQuery" {
@@ -532,15 +645,18 @@ function New-FreshserviceApiRequest {
                 try {
                     Invoke-RestMethod -Method $RequestMethod -Uri $FinalApiUrl -Headers $Headers # return api request
                 } catch {
+                    $FirstCatchThrown = $true
                     $NewFreshserviceApiRequestSendFailException = "[New-FreshserviceApiRequest]::Something went wrong while sending your Freshservice API Request! Full Error:`r`n`r`n$($_)"
-                    throw [System.Exception]::new($NewFreshserviceApiRequestSendFailException)
+                    throw [System.Exception]::new($NewFreshserviceApiRequestSendFailException)                    
                 }            
             }
         
         } catch {        
         
-            $NewFreshserviceApiRequestGeneralException = "[New-FreshserviceApiRequest]::Something went wrong while creating a new Freshservice API Request! Full Error:`r`n`r`n$($_)"
-            throw [System.Exception]::new($NewFreshserviceApiRequestGeneralException)        
+            if(-not $FirstCatchThrown){
+                $NewFreshserviceApiRequestGeneralException = "[New-FreshserviceApiRequest]::Something went wrong while creating a new Freshservice API Request! Full Error:`r`n`r`n$($_)"
+                throw [System.Exception]::new($NewFreshserviceApiRequestGeneralException)        
+            }
         
         }    
     }
