@@ -88,7 +88,7 @@ Get-FreshserviceTicket -TicketId <#-or-#> -RequesterEmail <#-or-#> -TicketFilter
 ```` powershell
 New-FreshserviceTicket
 ````
-#### - ***This function is currently in progress***
+- #### ***This function is currently in progress***
 
 
 ## Requesters
