@@ -88,7 +88,7 @@ Get-FreshserviceTicket -TicketId <#-or-#> -RequesterEmail <#-or-#> -TicketFilter
 ```` powershell
 New-FreshserviceTicket
 ````
-- #### ***This function is currently in progress***
+- ![#f03c15](https://placehold.it/15/f03c15/000000?text=+) ***This function is currently in progress***
 
 
 ## Requesters
