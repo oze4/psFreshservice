@@ -16,7 +16,7 @@ Freshservice Powershell Module.
 
 
 
-## :Getting Started:
+# :Getting Started:
 
 **If you use SSO (single sign-on), you HAVE TO use the API Key method to connect!!!**
 
@@ -26,7 +26,7 @@ This module offers two ways to connect to Freshservice (`Username and Password |
 
 
 
-## :Demo:
+# :Demo:
 
 ***[High level module demo](https://github.com/oze4/psFreshservice/blob/master/demo/psFreshservice.MODULE-HOW-TO.ps1)***
 
@@ -34,7 +34,7 @@ This module offers two ways to connect to Freshservice (`Username and Password |
 
 # :Functions:
 
-### Connecting
+## Connecting
 ```` powershell
 Connect-Freshservice -ApiKey <#-or-#> -Username -Password <#-and-#> -Domain
 ````
@@ -48,7 +48,7 @@ Set-RequiredSecurityProtocol
 
 
 
-### Core
+## Core
 ```` powershell
 New-FreshserviceApiRequest -ApiUrlQuery <#-or-#> -ApiUrlFull <#-and-#> -RequestMethod -ContentType
 ````
@@ -71,7 +71,7 @@ Confirm-StringIsUri -String
 
 
 
-### Agents
+## Agents
 ```` powershell
 Get-FreshserviceAgent -Id <#-or-#> -State <#-(fulltime|occasional)-#> <#-or-#> -Email <#-or-#> -MobilePhone <#-or-#> -WorkPhone
 ````
@@ -79,7 +79,7 @@ Get-FreshserviceAgent -Id <#-or-#> -State <#-(fulltime|occasional)-#> <#-or-#> -
 
 
 
-### Tickets
+## Tickets
 ```` powershell
 Get-FreshserviceTicket -TicketId <#-or-#> -RequesterEmail <#-or-#> -TicketFilter <#-(all_tickets|new_my_open|monitored_by|spam|deleted)-#>
 ````
@@ -91,7 +91,7 @@ New-FreshserviceTicket
 #### - ***This function is currently in progress***
 
 
-### Requesters
+## Requesters
 ```` powershell
 Get-FreshserviceRequester -Id <#-or-#> -Email <#-or-#> -MobilePhone <#-or-#> -WorkPhone
 ````
