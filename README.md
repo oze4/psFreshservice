@@ -22,9 +22,10 @@ This module offers two ways to connect to Freshservice (Username and Password | 
 ```` powershell
 Connect-Freshservice
 ````
-    - ApiKey   = API Key for authentication (Have to use this method if SSO is enabled)
-    - Username = your Freshservice Username (this method does not work with SSO)
-    - Password = your Freshservice Password (this method does not work with SSO)
+- Parameters:
+  - ApiKey   = API Key for authentication (Have to use this method if SSO is enabled)
+  - Username = your Freshservice Username (this method does not work with SSO)
+  - Password = your Freshservice Password (this method does not work with SSO)
 
 ### Agents
 
