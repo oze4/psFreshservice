@@ -486,8 +486,12 @@ function Connect-Freshservice {
         [string]$Domain
     )   
     
-    try { 
-            
+    try {
+    
+        # Clear cached global variables
+        $Global:_FRESHSERVICE_SESSION_INFO_.BaseUrl    = $null
+        $Global:_FRESHSERVICE_SESSION_INFO_.AuthString = $null
+
         # to be set below
         $AuthHeader = $null 
         # see if user wants to auth with un/pw or api key 
