@@ -4,7 +4,7 @@ Freshservice Powershell Module
 
 ## Demo
 
-***[High level module demo](https://github.com/oze4/psFreshservice/blob/master/psFreshservice.MODULE-HOW-TO.ps1)***
+***[High level module demo](https://github.com/oze4/psFreshservice/blob/master/example/psFreshservice.MODULE-HOW-TO.ps1)***
 
 ## :Features:
 
