@@ -63,14 +63,16 @@ Confirm-StringIsUri -String
 
 ### Agents
 ```` powershell
-
+Get-FreshserviceAgent -Id <#-or-#> -State <#-(fulltime|occasional)-#> <#-or-#> -Email <#-or-#> -MobilePhone <#-or-#> -WorkPhone
 ````
+- *If no parameters are used, all Agents are returned*
 
 
 ### Tickets
+```` powershell
+Get-FreshserviceTicket -TicketId <#-or-#> -RequesterEmail <#-or-#> -TicketFilter <#-(all_tickets|new_my_open|monitored_by|spam|deleted)-#>
+````
 
-- Get specific ticket (based on a variety of filters)
-- Get all tickets (which you can also filter)
 
 ### Requesters
 
