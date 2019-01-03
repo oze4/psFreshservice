@@ -2,6 +2,16 @@
 
 Freshservice Powershell Module.
 
+#### Table of Contents
+- [Getting Started](https://github.com/oze4/psFreshservice/blob/master/README.md#getting-started)
+- [Demo](https://github.com/oze4/psFreshservice/blob/master/README.md#demo)
+- [Functions](https://github.com/oze4/psFreshservice/blob/master/README.md#functions)
+  - [Connecting](https://github.com/oze4/psFreshservice/blob/master/README.md#connecting)
+  - [Core](https://github.com/oze4/psFreshservice/blob/master/README.md#core)
+  - [Agents](https://github.com/oze4/psFreshservice/blob/master/README.md#agents)
+  - [Tickets](https://github.com/oze4/psFreshservice/blob/master/README.md#tickets)
+  - [Requesters](https://github.com/oze4/psFreshservice/blob/master/README.md#requesters)
+
 ## :Getting Started:
 
 **If you use SSO (single sign-on), you HAVE TO use the API Key method to connect**
