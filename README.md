@@ -2,6 +2,8 @@
 
 Freshservice Powershell Module.
 
+
+
 #### Table of Contents
 - [Getting Started](https://github.com/oze4/psFreshservice/blob/master/README.md#getting-started)
 - [Demo](https://github.com/oze4/psFreshservice/blob/master/README.md#demo)
@@ -12,6 +14,8 @@ Freshservice Powershell Module.
   - [Tickets](https://github.com/oze4/psFreshservice/blob/master/README.md#tickets)
   - [Requesters](https://github.com/oze4/psFreshservice/blob/master/README.md#requesters)
 
+
+
 ## :Getting Started:
 
 **If you use SSO (single sign-on), you HAVE TO use the API Key method to connect!!!**
@@ -21,12 +25,14 @@ This module offers two ways to connect to Freshservice (`Username and Password |
 ***[How to get Freshservice API Key](https://help-desk-migration.com/help/how-to-get-freshdesk-freshservice-api-key/)***
 
 
+
 ## :Demo:
 
 ***[High level module demo](https://github.com/oze4/psFreshservice/blob/master/demo/psFreshservice.MODULE-HOW-TO.ps1)***
 
-## :Functions:
 
+
+# :Functions:
 
 ### Connecting
 ```` powershell
@@ -39,6 +45,8 @@ Set-RequiredSecurityProtocol
 ````
 - This command is ran during module import
   - ***it is needed to talk to the Freshservice API - it sets the appropriate encryption types for the session and MUST BE RAN EACH TIME YOU IMPORT THE MODULE!!***
+
+
 
 ### Core
 ```` powershell
@@ -61,6 +69,8 @@ ConvertFrom-Base64 -EncodedString
 Confirm-StringIsUri -String
 ````
 
+
+
 ### Agents
 ```` powershell
 Get-FreshserviceAgent -Id <#-or-#> -State <#-(fulltime|occasional)-#> <#-or-#> -Email <#-or-#> -MobilePhone <#-or-#> -WorkPhone
@@ -68,11 +78,13 @@ Get-FreshserviceAgent -Id <#-or-#> -State <#-(fulltime|occasional)-#> <#-or-#> -
 - *If parameters are not used, __all Agents are returned__*
 
 
+
 ### Tickets
 ```` powershell
 Get-FreshserviceTicket -TicketId <#-or-#> -RequesterEmail <#-or-#> -TicketFilter <#-(all_tickets|new_my_open|monitored_by|spam|deleted)-#>
 ````
 - *If parameters are not used, __all Tickets are returned__*
+
 
 
 ### Requesters
