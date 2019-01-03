@@ -15,9 +15,10 @@ This module offers two ways to connect to Freshservice (Username and Password | 
 
 ***[High level module demo](https://github.com/oze4/psFreshservice/blob/master/example/psFreshservice.MODULE-HOW-TO.ps1)***
 
-### :Functions:
+## :Functions:
 
-## Connecting
+
+### Connecting
 
 - Connect-Freshservice
   - ApiKey   = API Key for authentication (Have to use this method if SSO is enabled)
