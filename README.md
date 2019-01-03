@@ -27,7 +27,12 @@ Connect-Freshservice -ApiKey <#-or-#> -Username -Password
 ```` powershell
 New-FreshserviceApiRequest -ApiUrlQuery <#-or-#> -ApiUrlFull <#-and-#> -RequestMethod <#-Default|Delete|Get|Head|Merge|Options|Path|Put|Post|Trace-#> -ContentType -AuthorizationHeader -FreshserviceBaseUrl
 ````
-- `New-FreshserviceApiRequest` is the 'core' function that the majority of other functions 'wrap' around, specifically the ones that interact with the API via REST
+- `New-FreshserviceApiRequest` is the 'core' function that the majority of other functions 'wrap' around, specifically the ones that interact with the API via REST ***(the `Connect-Freshservice` command must be ran before you are able to use this command)***
+  - `-ApiUrlQuery` means you only have to supply everything after the root domain/host 
+    - ex: (/api/v2/agents)
+  - `-ApiUrlFull` means you have to supply the full URL
+    - ex: (https://domain.freshservice.com/api/v2/agents)
+  - You can use `New-FreshserviceApiRequest` on its own (as long as you use `-ApiUrlFull`)
 ```` powershell
 ConvertTo-Base64 -StringToEncode
 ````
