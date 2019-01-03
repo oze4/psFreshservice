@@ -23,10 +23,21 @@ This module offers two ways to connect to Freshservice (Username and Password | 
 Connect-Freshservice -ApiKey <#-or-#> -Username -Password
 ````
 
-### Agents
+### Core
+```` powershell
+ConvertTo-Base64 -StringToEncode
+````
+```` powershell
+ConvertFrom-Base64 -EncodedString
+````
+```` powershell
+Confirm-StringIsUri -String
+````
 
-- Get specific agent
-- Get all agents
+### Agents
+```` powershell
+
+````
 
 
 ### Tickets
