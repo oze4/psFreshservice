@@ -32,13 +32,13 @@ Import-Module "C:\Freshservice\Freshservice.psm1"
 Connect-Freshservice -Username "user@domain.com" -Password "!@#$%^&*((*&^%$#@!" -Domain "google" 
 
 # Grab all users
-$AllUsers = Get-FreshserviceUser  # No params means all users are returned
+$AllUsers = Get-FreshserviceAgent  # No params means all users are returned
 
 # Iterate through users
-foreach($user in $AllUsers){
+foreach($agent in $AllUsers){
     Write-Host `r`n("=" * 50) -f Yellow
-    Write-Host $user.name
-    Write-Host $user
+    Write-Host $agent.name
+    Write-Host $agent
     Write-Host `r`n("=" * 50) -f Yellow
 }
 
