@@ -96,7 +96,7 @@ Read-FreshserviceTicketQueue -Tickets <#-and/or-#> -MaxReturn <#-(max size is 10
 ```` powershell
 New-FreshserviceTicket
 ````
-- ![#f03c15](https://placehold.it/15/f03c15/000000?text=+This function is currently in progress)
+- ![#f03c15](https://placehold.it/15/f03c15/000000?text=+"This function is currently in progress")
 
 
 ## Requesters
