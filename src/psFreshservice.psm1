@@ -2,7 +2,7 @@
 
         MIT License
 
-        Copyright (c) 2019 Matthew Oestreich
+        Copyright (c) 2018 Matthew Oestreich
 
         Permission is hereby granted, free of charge, to any person obtaining a copy
         of this software and associated documentation files (the "Software"), to deal
@@ -191,6 +191,56 @@ function Get-FreshserviceRequester {
 }
 
 
+function Read-FreshserviceTicketQueue {
+    <#
+            .SYNOPSIS
+            - Handles pagination for tickets
+            .DESCRIPTION
+            - When you query the freshservice api for tickets, they return them in "batches" - this function is -
+            designed to iterate through those "batches"; concatenating the results into one object for your viewing pleasure
+            .PARAMETER Tickets
+            - Tickets that were returned from "Get-FreshserviceTicket"
+            .EXAMPLE
+            - TODO:complete this
+    #>
+    param(
+        [Parameter(Mandatory=$true)]
+        [Microsoft.PowerShell.Commands.WebResponseObject]$Tickets,
+        
+        [Parameter(Mandatory=$false)]
+        [int]$MaxReturn
+    )
+    
+    try {
+        
+        if (($MaxReturn -gt 1000) -or (-not $PSBoundParameters["MaxReturn"])) { $MaxReturn = 1000 }
+        
+        # Create main object and tie our first page of tickets to it
+        $AllTickets = @()
+        $AllTickets += ($Tickets.Content | ConvertFrom-Json).tickets        
+        
+        $stagingTickets = $Tickets        
+        for($trigger = 1; $trigger -ne 2;) {  
+            if ($AllTickets.Count -lt $MaxReturn) {            
+                $isNextPage = $null
+                $isNextPage = [regex]::Match($stagingTickets.Headers["Link"].ToString(), "(?<=\<)(.*?)(?=\>)")                     
+                if($isNextPage -ne $null) {            
+                    $nextPage       = $isNextPage.Value
+                    $stagingTickets = New-FreshserviceApiRequest -ApiUrlFull $nextPage -RequestMethod Get -ContentType application/json -AsWebRequest                
+                    $AllTickets += ($stagingTickets.Content | ConvertFrom-Json).tickets                
+                    Start-Sleep -Milliseconds 200                
+                } if ($isNextPage -eq $null) { $trigger = 2 }         
+            } if ($AllTickets.Count -ge $MaxReturn) { $trigger = 2 }
+        }                            
+    }  catch {    
+        throw $_    
+    } finally {
+        $AllTickets
+    }
+
+}
+
+
 function Get-FreshserviceTicket {
     <#
             .SYNOPSIS
@@ -218,7 +268,7 @@ function Get-FreshserviceTicket {
     
     param(
         [Parameter(Mandatory=$false, ParameterSetName="Filter")]
-        [ValidateSet("all_tickets","new_my_open","monitored_by","spam","deleted")]
+        [ValidateSet("all_tickets","new_and_my_open","watching","spam","deleted")]
         [string]$TicketFilter,
     
         [Parameter(Mandatory=$false, ParameterSetName="Id")]
@@ -230,23 +280,26 @@ function Get-FreshserviceTicket {
     
     try {
     
+        $base = "/api/v2/tickets"
+    
         # If no params are used return all tickets
         if($PSBoundParameters.Keys.Count -eq 0){
         
-            (New-FreshserviceApiRequest -ApiUrlQuery "/helpdesk/tickets/filter/all_tickets?format=json" -RequestMethod Get -ContentType application/json)
+            $stagingTickets = New-FreshserviceApiRequest -ApiUrlQuery ("{0}?per_page=100" -f $base) -RequestMethod Get -ContentType application/json -AsWebRequest
+            Read-FreshserviceTicketQueue -Tickets $stagingTickets
         
         } else {
         
             # Sort out which query is being used
             $query_ = $null
             switch($PSBoundParameters.Keys){
-                "TicketFilter"   { $query_ = ("/helpdesk/tickets/filter/{0}?format=json" -f $TicketFilter) }
-                "TicketId"       { $query_ = ("/helpdesk/tickets/{0}.json" -f $TicketId) }
-                "RequesterEmail" { $query_ = ("/helpdesk/tickets.json?email={0}&filter_name=all_tickets" -f $RequesterEmail) }
+                "TicketFilter"   { $query_ = ("{0}?filter={1}&per_page=100" -f $base, $TicketFilter) }
+                "TicketId"       { $query_ = ("{0}/{1}" -f $base, $TicketId) }
+                "RequesterEmail" { $query_ = ("{0}?email={1}&per_page=100" -f $base, $RequesterEmail) }
             }
             
             # Return query results
-            (New-FreshserviceApiRequest -ApiUrlQuery $query_ -RequestMethod Get -ContentType application/json)
+            (New-FreshserviceApiRequest -ApiUrlQuery $query_ -RequestMethod Get -ContentType application/json -AsWebRequest)
         
         } 
                     
@@ -256,6 +309,72 @@ function Get-FreshserviceTicket {
         throw [System.Exception]::new($FreshserviceTicketNotFoundException)
     
     }
+}
+
+
+function Get-FreshserviceKnowledgeBase {
+    <#
+            .SYNOPSIS
+            - Get Freshservice solution categories (what I am referring to as Knowledge Base)
+            .DESCRIPTION
+            - ** if no params are supplied, all categories are returned!!! **
+            .PARAMETER %
+            - 
+            .PARAMETER %
+            - 
+            .PARAMETER %
+            - 
+            .EXAMPLE
+            - TODO:complete this
+            .EXAMPLE
+            - TODO:complete this
+    #>
+    
+    try {
+    
+        $base = "/solution/categories.json"
+        (New-FreshserviceApiRequest -ApiUrlQuery $base -RequestMethod Get -ContentType application/json).category
+    
+    } catch {
+    
+        $GetFreshserviceKnowledgeBaseException = "[Get-FreshserviceKnowledgeBase]::Sopmething went wrong while locating Knowledge Bases! Full Error:`r`n`r`n$($_)"
+        throw [System.Exception]::new($GetFreshserviceKnowledgeBaseException)     
+    
+    }
+
+}
+
+
+function Get-FreshserviceTicketCategory {
+    <#
+            .SYNOPSIS
+            - Get Freshservice service categories for tickets
+            .DESCRIPTION
+            - ** if no params are supplied, all categories are returned!!! **
+            .PARAMETER %
+            - 
+            .PARAMETER %
+            - 
+            .PARAMETER %
+            - 
+            .EXAMPLE
+            - TODO:complete this
+            .EXAMPLE
+            - TODO:complete this
+    #>
+    
+    try {
+    
+        $base = "/catalog/items.json"
+        (New-FreshserviceApiRequest -ApiUrlQuery $base -RequestMethod Get -ContentType application/json)
+    
+    } catch {
+    
+        $GetFreshserviceTicketCategoryException = "[Get-FreshserviceTicketCategory]::Sopmething went wrong while locating Freshservice Categories! Full Error:`r`n`r`n$($_)"
+        throw [System.Exception]::new($GetFreshserviceTicketCategoryException)     
+    
+    }
+
 }
 
 
@@ -379,9 +498,12 @@ function ConvertTo-Base64 {
             [System.Text.Encoding]::UTF8.GetBytes($StringToEncode) 
         )
     } catch {
+    
         $ConvertToBase64Exception = "[ConvertTo-Base64]Something went wrong encoding string to base64. Full Error:`r`n`r`n$($_)"
         throw [Exception]::new($ConvertToBase64Exception)
+    
     }
+    
 }
 
 
@@ -602,6 +724,9 @@ function New-FreshserviceApiRequest {
         [string]$ContentType,
         
         [Parameter(Mandatory=$false)]
+        [switch]$AsWebRequest,
+        
+        [Parameter(Mandatory=$false)]
         [string]$AuthorizationHeader = $Global:_FRESHSERVICE_SESSION_INFO_.AuthString,
         
         [Parameter(Mandatory=$false)]
@@ -647,9 +772,13 @@ function New-FreshserviceApiRequest {
                     'Content-Type'  = $ContentType
                 }        
                 try {
-                    Invoke-RestMethod -Method $RequestMethod -Uri $FinalApiUrl -Headers $Headers # return api request
+                    if($AsWebRequest){
+                        Invoke-WebRequest -Method $RequestMethod -Uri $FinalApiUrl -Headers $Headers
+                    } 
+                    if(-not $AsWebRequest) { 
+                        Invoke-RestMethod -Method $RequestMethod -Uri $FinalApiUrl -Headers $Headers # return api request
+                    }
                 } catch {
-                    $FirstCatchThrown = $true
                     $NewFreshserviceApiRequestSendFailException = "[New-FreshserviceApiRequest]::Something went wrong while sending your Freshservice API Request! Full Error:`r`n`r`n$($_)"
                     throw [System.Exception]::new($NewFreshserviceApiRequestSendFailException)                    
                 }            
@@ -657,10 +786,8 @@ function New-FreshserviceApiRequest {
         
         } catch {        
         
-            if(-not $FirstCatchThrown){
-                $NewFreshserviceApiRequestGeneralException = "[New-FreshserviceApiRequest]::Something went wrong while creating a new Freshservice API Request! Full Error:`r`n`r`n$($_)"
-                throw [System.Exception]::new($NewFreshserviceApiRequestGeneralException)        
-            }
+            $NewFreshserviceApiRequestGeneralException = "[New-FreshserviceApiRequest]::Something went wrong while creating a new Freshservice API Request! Full Error:`r`n`r`n$($_)"
+            throw [System.Exception]::new($NewFreshserviceApiRequestGeneralException)
         
         }    
     }
