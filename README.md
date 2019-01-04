@@ -84,19 +84,19 @@ Get-FreshserviceAgent -Id <#-or-#> -State <#-(fulltime|occasional)-#> <#-or-#> -
 Get-FreshserviceTicket -TicketId <#-or-#> -RequesterEmail <#-or-#> -TicketFilter <#-(all_tickets|new_my_open|monitored_by|spam|deleted)-#>
 ````
 - *If parameters are not used, __all Tickets are returned__*
-- ***MAX RETURN FOR TICKETS IS 1000 TICKETS***
+- ***DEFAULT MAX RETURN FOR TICKETS IS 1000 TICKETS***
   - The API is rate limited by Freshservice
 
 ```` powershell
 Read-FreshserviceTicketQueue -Tickets <#-and/or-#> -MaxReturn <#-(max size is 1000)-#>
 ````
-- Used by `Get-FreshserviceTicket` to iterate through each page of tickets
+- Used inside of `Get-FreshserviceTicket` to iterate through each page of tickets
   - This is because the Freshservice API will only return 100 tickets per page at most
 
 ```` powershell
 New-FreshserviceTicket
 ````
-- ![#f03c15](https://placehold.it/15/f03c15/000000?text=+) This function is currently in progress
+- ![#f03c15](https://placehold.it/15/f03c15/000000?text=+) `This function is currently in progress`
 
 
 ## Requesters
