@@ -234,10 +234,10 @@ function Read-FreshserviceTicketQueue {
                 } if ($isNextPage -eq $null) { $trigger = 2 }         
             } if ($AllTickets.Count -ge $MaxReturn) { $trigger = 2 }
             
-            # return
-            $AllTickets
-            
         } 
+       
+        # return
+        $AllTickets
         
     }  catch {  
     
