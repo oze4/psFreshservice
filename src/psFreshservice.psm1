@@ -274,7 +274,7 @@ function Get-FreshserviceTicket {
     
     param(
         [Parameter(Mandatory=$false, ParameterSetName="Filter")]
-        [ValidateSet("all_tickets","new_and_my_open","watching","spam","deleted")]
+        [ValidateSet("new_and_my_open","watching","spam","deleted")]
         [string]$TicketFilter,
     
         [Parameter(Mandatory=$false, ParameterSetName="Id")]
