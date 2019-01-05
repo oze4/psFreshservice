@@ -43,6 +43,7 @@ Connect-Freshservice -ApiKey <#-or-#> -Username -Password <#-and-#> -Domain
 ```` powershell
 Set-RequiredSecurityProtocol
 ````
+- This command is **invoked automatically during module import** *you do not have to manually run this command yourself!*
 - This command is ran during module import
   - ***it is needed to talk to the Freshservice API - it sets the appropriate encryption types for the session and MUST BE RAN EACH TIME YOU IMPORT THE MODULE!!***
 
