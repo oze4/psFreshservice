@@ -213,7 +213,9 @@ function Read-FreshserviceTicketQueue {
     
     try {
         
-        if (($MaxReturn -gt 1000) -or (-not $PSBoundParameters["MaxReturn"])) { $MaxReturn = 1000 }
+        if (($MaxReturn -gt 1000) -or (-not $PSBoundParameters["MaxReturn"])) { 
+            $MaxReturn = 1000 
+        }
         
         # Create main object and tie our first page of tickets to it
         $AllTickets = @()
