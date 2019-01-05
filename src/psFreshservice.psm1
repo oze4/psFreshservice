@@ -233,11 +233,16 @@ function Read-FreshserviceTicketQueue {
                     Start-Sleep -Milliseconds 200                
                 } if ($isNextPage -eq $null) { $trigger = 2 }         
             } if ($AllTickets.Count -ge $MaxReturn) { $trigger = 2 }
-        }                            
-    }  catch {    
-        throw $_    
-    } finally {
-        $AllTickets
+            
+            # return
+            $AllTickets
+            
+        } 
+        
+    }  catch {  
+    
+        throw $_  
+        
     }
 
 }
