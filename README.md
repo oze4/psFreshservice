@@ -82,10 +82,10 @@ Get-FreshserviceAgent -Id <#-or-#> -State <#-(fulltime|occasional)-#> <#-or-#> -
 
 ## Tickets
 ```` powershell
-Get-FreshserviceTicket -TicketId <#-or-#> -RequesterEmail <#-or-#> -TicketFilter <#-(all_tickets|new_my_open|monitored_by|spam|deleted)-#>
+Get-FreshserviceTicket -TicketId <#-or-#> -RequesterEmail <#-or-#> -TicketFilter <#-(new_and_my_open|monitored_by|spam|deleted)-#>
 ````
-- *If parameters are not used, __all Tickets are returned__*
-- ***DEFAULT MAX RETURN FOR TICKETS IS 1000 TICKETS***
+- *If parameters are not used, __~~all~~ 1000 Tickets are returned__*
+- ***DEFAULT MAX RETURN FOR TICKETS IS 1000 TICKETS; EACH TIME YOU RUN THIS COMMAND***
   - The API is rate limited by Freshservice
 
 ```` powershell
