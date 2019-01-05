@@ -51,10 +51,10 @@ Set-RequiredSecurityProtocol
 
 ## Core
 ```` powershell
-New-FreshserviceApiRequest -ApiUrlQuery <#-or-#> -ApiUrlFull <#-and-#> -RequestMethod -ContentType <#-or-#> [switch] -AsWebRequest
+New-FreshserviceApiRequest -ApiUrlQuery <#-or-#> -ApiUrlFull <#-and-#> -RequestMethod -ContentType <#-or-#> -AsWebRequest
 ````
 - `New-FreshserviceApiRequest` is the 'core' function that the majority of other functions 'wrap' around, specifically the ones that interact with the API via REST
-- This command itself is nothing more than a wrapper for `Invoke-RestMethod` - although, supplying the switch `-AsWebRequest` will use `Invoke-WebRequest` instead of `Invoke-RestMethod` (while they both do the same thing, the data they return is different - `Invoke-WebRequest` lets you parse headers, etc..)
+- This command itself is nothing more than a wrapper for `Invoke-RestMethod` - although, supplying the switch `AsWebRequest` will use `Invoke-WebRequest` instead of `Invoke-RestMethod` (while `Invoke-WebRequest` and `Invoke-RestMethod` do the same thing, the data they return is different - `Invoke-WebRequest` lets you parse headers, etc..)
   - ***The `Connect-Freshservice` command must be ran before you are able to use `New-FreshserviceApiRequest`***
   - `-ApiUrlQuery` means you only have to supply everything after the root domain/host 
     - ex: (`/api/v2/agents`)
