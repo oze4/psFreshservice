@@ -1,3 +1,5 @@
+[![Build status](https://ci.appveyor.com/api/projects/status/3fkr4rnw9w20ateg/branch/master?svg=true)](https://ci.appveyor.com/project/oze4/psfreshservice/branch/master)
+
 # psFreshservice
 
 Freshservice Powershell Module.
