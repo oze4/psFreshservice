@@ -220,11 +220,10 @@ function Read-FreshservicePagination {
         }
         
         # Create main object and tie our first page of objects to it
-        $AllObjects = @()
-        $AllObjects += ($Pages.Content | ConvertFrom-Json).$Type       
+        $AllObjects   = @()
+        $AllObjects  += ($Pages.Content | ConvertFrom-Json).$Type       
         
-        $stagingPages = $Pages
-        
+        $stagingPages = $Pages        
         for ($trigger = 1; $trigger -ne 2;) {  
         
             if ($AllObjects.Count -lt $MaxReturn) {   
