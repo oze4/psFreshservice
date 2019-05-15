@@ -294,7 +294,7 @@ function Get-FreshserviceTicket {
         if($PSBoundParameters.Keys.Count -eq 0){
         
             $stagingTickets = New-FreshserviceApiRequest -ApiUrlQuery ("{0}?per_page=100" -f $base) -RequestMethod Get -ContentType application/json -AsWebRequest
-            Read-FreshserviceTicketQueue -Tickets $stagingTickets
+            Read-FreshservicePagination -Pages $stagingTickets -Type tickets
         
         } else {
         
@@ -308,7 +308,7 @@ function Get-FreshserviceTicket {
             
             # Return query results
             $queryResults = New-FreshserviceApiRequest -ApiUrlQuery $query_ -RequestMethod Get -ContentType application/json -AsWebRequest
-            Read-FreshserviceTicketQueue -Tickets $queryResults
+            Read-FreshserviceTicketQueue -Pages $queryResults -Type tickets
         
         } 
                     
