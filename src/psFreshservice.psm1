@@ -707,6 +707,10 @@ function New-FreshserviceApiRequest {
             .PARAMETER ContentType
             - REST request content type (goes inside header)
             - Add new content types to the set if needed (to restrict the content that can be transferred cross site
+            .PARAMETER AsWebRequest
+            - Sends the API/HTTP request using 'Invoke-WebRequest'
+            - 'Invoke-WebRequest' returns the HTTP headers along with data, this is needed to parse pagination
+            - 'Invoke.RestMethod' only returns data - no HTTP request specific info
             .PARAMETER AuthorizationHeader
             - Base64 encoded authorization header, which we tie to a global variable (hashtable) during initial connection
             - This is one of the 'checks' we do
