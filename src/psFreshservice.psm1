@@ -234,9 +234,9 @@ function Read-FreshservicePagination {
                 $isNextPage = [regex]::Match($stagingPages.Headers["Link"].ToString(), "(?<=\<)(.*?)(?=\>)") 
                                     
                 if ($isNextPage -ne $null) {            
-                    $nextPage       = $isNextPage.Value
+                    $nextPage     = $isNextPage.Value
                     $stagingPages = New-FreshserviceApiRequest -ApiUrlFull $nextPage -RequestMethod Get -ContentType application/json -AsWebRequest                
-                    $AllObjects += ($stagingPages.Content | ConvertFrom-Json).$Type                
+                    $AllObjects  += ($stagingPages.Content | ConvertFrom-Json).$Type                
                     Start-Sleep -Milliseconds 200                
                 } 
                 
