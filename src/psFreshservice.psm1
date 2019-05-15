@@ -191,7 +191,7 @@ function Get-FreshserviceRequester {
 }
 
 
-function Read-FreshserviceTicketQueue {
+function Read-FreshservicePagination {
     <#
             .SYNOPSIS
             - Handles pagination for tickets
@@ -205,10 +205,14 @@ function Read-FreshserviceTicketQueue {
     #>
     param(
         [Parameter(Mandatory=$true)]
-        [Microsoft.PowerShell.Commands.WebResponseObject]$Tickets,
+        [Microsoft.PowerShell.Commands.WebResponseObject]$Pages,
         
         [Parameter(Mandatory=$false)]
-        [int]$MaxReturn
+        [int]$MaxReturn,
+        
+        [Parameter(Mandatory)]
+        [ValidateSet("tickets")]
+        [string]$Type
     )
     
     try {
@@ -217,26 +221,26 @@ function Read-FreshserviceTicketQueue {
             $MaxReturn = 1000 
         }
         
-        # Create main object and tie our first page of tickets to it
-        $AllTickets = @()
-        $AllTickets += ($Tickets.Content | ConvertFrom-Json).tickets        
+        # Create main object and tie our first page of objects to it
+        $AllObjects = @()
+        $AllObjects += ($Pages.Content | ConvertFrom-Json).$Type       
         
-        $stagingTickets = $Tickets        
+        $stagingPages = $Pages        
         for($trigger = 1; $trigger -ne 2;) {  
-            if ($AllTickets.Count -lt $MaxReturn) {            
+            if ($AllObjects.Count -lt $MaxReturn) {            
                 $isNextPage = $null
-                $isNextPage = [regex]::Match($stagingTickets.Headers["Link"].ToString(), "(?<=\<)(.*?)(?=\>)")                     
+                $isNextPage = [regex]::Match($stagingPages.Headers["Link"].ToString(), "(?<=\<)(.*?)(?=\>)")                     
                 if($isNextPage -ne $null) {            
                     $nextPage       = $isNextPage.Value
-                    $stagingTickets = New-FreshserviceApiRequest -ApiUrlFull $nextPage -RequestMethod Get -ContentType application/json -AsWebRequest                
-                    $AllTickets += ($stagingTickets.Content | ConvertFrom-Json).tickets                
+                    $stagingPages = New-FreshserviceApiRequest -ApiUrlFull $nextPage -RequestMethod Get -ContentType application/json -AsWebRequest                
+                    $AllObjects += ($stagingPages.Content | ConvertFrom-Json).$Type                
                     Start-Sleep -Milliseconds 200                
                 } if ($isNextPage -eq $null) { $trigger = 2 }         
-            } if ($AllTickets.Count -ge $MaxReturn) { $trigger = 2 }
+            } if ($AllObjects.Count -ge $MaxReturn) { $trigger = 2 }
         } 
        
         # return
-        $AllTickets
+        $AllObjects
         
     }  catch {  
     
