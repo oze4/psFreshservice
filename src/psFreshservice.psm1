@@ -194,12 +194,10 @@ function Get-FreshserviceRequester {
 function Read-FreshservicePagination {
     <#
             .SYNOPSIS
-            - Handles pagination for tickets
+            - Handles pagination for API returns
             .DESCRIPTION
-            - When you query the freshservice api for tickets, they return them in "batches" - this function is -
+            - When you query the freshservice api, they return data in "batches" - this function is -
             designed to iterate through those "batches"; concatenating the results into one object for your viewing pleasure
-            .PARAMETER Tickets
-            - Tickets that were returned from "Get-FreshserviceTicket"
             .EXAMPLE
             - TODO:complete this
     #>
