@@ -321,7 +321,7 @@ function Get-FreshserviceTicket {
             
             # Return query results
             $queryResults = New-FreshserviceApiRequest -ApiUrlQuery $query_ -RequestMethod Get -ContentType application/json -AsWebRequest
-            Read-FreshserviceTicketQueue -Pages $queryResults -Type tickets
+            Read-FreshservicePagination -Pages $queryResults -Type tickets
         
         } 
                     
